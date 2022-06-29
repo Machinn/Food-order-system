@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
 import CartContext from "../../store/cart-context";
+import AuthContext from "../../store/auth-context";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
 
@@ -9,7 +10,9 @@ const Cart = (props) => {
   const [isCheckout, setIsCheckout] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
+  
   const cartCtx = useContext(CartContext);
+  const authCtx = useContext(AuthContext)
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
   const hasItems = cartCtx.items.length > 0;
@@ -78,9 +81,12 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && (
+      {authCtx.isLoggedIn && isCheckout && (
         <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />
       )}
+
+    
+
       {!isCheckout && modalAction}
     </React.Fragment>
   );
